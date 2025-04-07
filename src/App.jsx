@@ -3,44 +3,24 @@ import { useState } from "react";
 import { TodoItem } from "./components/TodoItem";
 import { AddToDo } from "./components/AddToDo";
 import { ToggleTheme } from "./components/ToggleTheme";
+import { getInitialTheme } from "./helpers/GetInitialTheme";
+import { toggleTheme } from "./helpers/ToggleTheme";
 
 function App() {
-  const initialTodos = [
-    { id: 1, text: "Изучить React" },
-    { id: 2, text: "Сделать ToDo-APP" },
-    { id: 3, text: "Добавить стили Tailwind" },
-  ];
-  const [todos, setTodos] = useState(initialTodos);
+ 
+  const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
 
-  function getInitialTheme() {
-    const savedTheme = localStorage.getItem("theme");
-    const preferDark = window.matchMedia(
-      "(prefer-color-scheme : dark)"
-    ).matches;
+  
 
-    if (savedTheme) {
-      return savedTheme;
-    } else if (preferDark) {
-      return "dark";
-    } else {
-      const hours = new Date().getHours();
-      return hours < 6 || hours > 20 ? "dark" : "light";
-    }
-  }
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => {
-      const newTheme = prevTheme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", newTheme);
-      return newTheme;
-    });
-  };
-
-  const onAdd = (text) => {
+  const onAdd = (text,deadline) => {
     const newToDo = {
       id: Date.now(),
       text,
+      completed: false,
+      createdAt: new Date().toISOString(),
+      deadline: deadline || null,
+      order: todos.length + 1,
     };
     setTodos([...todos, newToDo]);
   };
@@ -55,7 +35,7 @@ function App() {
       className="flex flex-col min-h-screen justify-center items-center bg-page-light dark:bg-page-dark p-6"
     >
       <div className="mb-6 ">
-        <ToggleTheme toggleTheme={toggleTheme} theme={theme} />
+        <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} theme={theme} />
       </div>
 
       <div className="mx-auto flex flex-col gap-3  rounded-xl p-10 ">
@@ -67,7 +47,7 @@ function App() {
         <AddToDo onAdd={onAdd} />
         <div className="flex flex-col gap-6">
           {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onDelete={onDelete}/>
+            <TodoItem key={todo.id} todo={todo} onDelete={onDelete} />
           ))}
         </div>
       </div>
