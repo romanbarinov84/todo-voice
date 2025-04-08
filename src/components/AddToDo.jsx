@@ -8,8 +8,10 @@ export function AddToDo({ onAdd }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (text.trim()) {
-      onAdd(text);
+      onAdd(text,deadline);
       setText("");
+      setDeadline("");
+      setShowDeadlineInput("");
     }
   };
 
@@ -26,15 +28,15 @@ export function AddToDo({ onAdd }) {
       <button className="text-6xl cursor-pointer hover:shadow-lg items-center justify-center text-center text-gray-300 p-2 " type="submit">+</button>
       </div>
       {showDeadlineInput && (
-          <div className="flex items-center justify-between text-2xl">
-        <input className="p-2 outline-none rounded-lg shadow-lg flex-1 mt-2" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
-        <button className="p-3 shadow-lg rounded-xl text-gray-500 hover:shadow-xl" type="button" onClick={() => {setDeadline(""); setShowDeadlineInput(false)}} >Отмена</button>
+          <div className="flex items-center justify-between text-2xl dark:bg-white mt-2 rounded-lg">
+        <input className="p-2 outline-none rounded-lg shadow-lg flex-1 mt-2 mr-2 dark:border-gray" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+        <button className="p-3 shadow-lg rounded-xl text-gray-500 hover:shadow-xl dark:bg-blue-300" type="button" onClick={() => {setDeadline(""); setShowDeadlineInput(false)}} >Отмена</button>
       </div>
       )}
       {!showDeadlineInput && (
           
        
-        <button className="self-start text-2xl p-3 shadow-lg rounded-xl text-gray-500 hover:shadow-xl" type="button" onClick={() => { setShowDeadlineInput(true)}} >+ deadline</button>
+        <button className="self-start text-2xl p-3 shadow-lg rounded-xl text-gray-500 hover:shadow-xl dark:bg-white mt-2" type="button" onClick={() => { setShowDeadlineInput(true)}} >+ deadline</button>
       
       )}
     
