@@ -5,11 +5,14 @@ export const TodoItem = ({ todo, onDelete }) => {
 
   return (
     <>
+     <div className="flex justify-center text-center -mb-7 bg-amber-300 text-lg rounded-t-xl">
+          <span>{todo.createdAt}</span>
+        </div>
     <div className="flex items-center justify-between bg-gray-200 dark:bg-amber-200 p-2 rounded-xl hover:shadow-lg dark:hover:shadow-amber-50 text-2xl h-22 ">
       <span className={`text-3xl mr-10 ${isCompleted ? "line-through" : ""}`}>
         {todo.text}
       </span>
-
+       
       <div className="flex items-center">
         <button
           onClick={() => setIsCompleted(!isCompleted)}
@@ -29,7 +32,7 @@ export const TodoItem = ({ todo, onDelete }) => {
         Delete
       </button>
     </div>
-    <div className={`flex flex-1 border-black bg-amber-300 -mt-6 px-4 py-2 rounded-b-xl ${
+    <div className={`flex flex-1 border-black bg-amber-300 -mt-7 px-4 py-2 rounded-b-xl ${
             isCompleted ? "bg-green-300 font-bold text-2xl" : "text-gray-400"
           }`}>
       {todo.deadline && (
