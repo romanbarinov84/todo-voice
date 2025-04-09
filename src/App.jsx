@@ -12,17 +12,18 @@ const LOCAL_STORAGE_KEY = "todos";
 function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
-  const [deletingId,setDeletingId] = useState(null)
+  const [deletingId, setDeletingId] = useState(null);
+  
 
   useEffect(() => {
     const loadInitialData = async () => {
-      const savedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+      const savedTodos = JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+      );
       setTodos(savedTodos);
     };
-   loadInitialData()
-  },[])
-
-
+    loadInitialData();
+  }, []);
 
   const onAdd = (text, deadline) => {
     const newToDo = {
@@ -36,17 +37,15 @@ function App() {
 
     const updatedTodos = [...todos, newToDo];
     setTodos(updatedTodos);
-    localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(updatedTodos))
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
   };
 
   const toggleComplete = (id) => {
     const todoToUpdate = todos.find((todo) => todo.id === id);
-
     if (!todoToUpdate) return;
-
     const updatedToDo = {
       ...todoToUpdate,
-      completed: !todoToUpdate.completed,
+      completed: todoToUpdate.completed,
     };
 
     const updatedTodos = todos.map((todo) =>
@@ -77,6 +76,7 @@ function App() {
             My ToDo-App
           </span>
         </h1>
+
         <AddToDo onAdd={onAdd} />
         <div className="flex flex-col gap-6">
           {todos.map((todo) => (
@@ -85,16 +85,23 @@ function App() {
               todo={todo}
               onDelete={() => setDeletingId(todo.id)}
               onToggleComplete={toggleComplete}
+              
             />
           ))}
         </div>
       </div>
-      {deletingId &&  <DeleteConfirmModal onCancel={() => setDeletingId(null)} onConfirm={() => {handleDelete(deletingId); setDeletingId(null)}}/>  }
-      
-        </div>
+      {deletingId && (
+        <DeleteConfirmModal
+          onCancel={() => setDeletingId(null)}
+          onConfirm={() => {
+            handleDelete(deletingId);
+            setDeletingId(null);
+          }}
+          message="Вы уверенны что хотите удалить эту задачу"
+        />
+      )}
+    </div>
   );
 }
 
 export default App;
-      
-
