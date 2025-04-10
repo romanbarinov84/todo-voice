@@ -1,19 +1,11 @@
-import { useState } from "react";
-import DeleteConfirmModal from "./DelleteConfimModal";
 
-export const TodoItem = ({ todo, onDelete }) => {
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [useDelete, setUseDelete] = useState(false);
 
-   console.log(todo);
-   console.log(isCompleted);
-   
+export const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
+  const isCompleted = todo.completed;
 
-  const deleteCompleted = () => {
-   setUseDelete(true)
-  }
 
   
+  console.log(isCompleted);
 
   return (
     <>
@@ -27,7 +19,8 @@ export const TodoItem = ({ todo, onDelete }) => {
 
         <div className="flex items-center">
           <button
-            onClick={() => setIsCompleted(!isCompleted)}
+            onClick={() => onToggleComplete(todo.id)}
+            
             className={`text-3xl cursor-pointer ${
               isCompleted
                 ? "text-green-300 font-bold text-2xl"
@@ -65,14 +58,6 @@ export const TodoItem = ({ todo, onDelete }) => {
           </span>
         )}
       </div>
-      {isCompleted &&  <button
-            className="px-4 py-2 bg-gray-300 rounded-xl  text-xl" onClick={deleteCompleted}
-          >
-            Удалить выполненые
-          </button>}
-
-          {useDelete && <DeleteConfirmModal message= "Вы действительно хотите удалить все сделанные задания" 
-           onCancel={() => setUseDelete(false)}/>}
     </>
   );
 };
