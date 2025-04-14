@@ -1,6 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-import { TodoItem } from "./components/TodoItem";
 import { AddToDo } from "./components/AddToDo";
 import { ToggleTheme } from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/GetInitialTheme";
@@ -9,22 +8,35 @@ import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./Hooks/useTodoManagement";
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
+import DeleteCompletedButton from "./components/DeleteCompletedButton";
+import TodoFilter from "./components/TodoFilter";
 
 function App() {
   const [theme, setTheme] = useState(getInitialTheme());
-  const [deletingId, setDeletingId] = useState(null);
-  const [isDeletingCompleted, setIsDeletingCompleted] = useState(false);
+  const [filter,setFilter] = useState("all");
+
+
 
   const {
-    todos,
-    onAdd,
-    handleUpdate,
-    toggleComplete,
-    handleDelete,
-    confirmDeleteCompleted,
-    handleDeleteCompleted,
-    hasCompletedTodos,
-  } = useTodoManagement();
+  todos,
+  onAdd,
+  handleUpdate,
+  toggleComplete,
+  handleDelete,
+  confirmDeleteCompleted,
+  handleDeleteCompleted,
+  hasCompletedTodos,
+  deletingId,
+  setDeletingId,
+  isDeletingCompleted,
+  setIsDeletingCompleted,
+} = useTodoManagement();
+
+const filteredTodos = todos.filter((todo) => {
+  if(filter === "completed") return todo.completed;
+  if(filter === "active") return !todo.completed;
+  return true;
+});
 
   return (
     <div
@@ -36,42 +48,40 @@ function App() {
 
         <div className="mx-auto flex flex-col gap-3  rounded-xl p-10 ">
           <Header />
-
+          
           <AddToDo onAdd={onAdd} />
+          <TodoFilter filter={filter} setFilter={setFilter}/>
           <TodoList
-            todos={todos}
+            todos={filteredTodos}
             handleUpdate={handleUpdate}
             toggleComplete={toggleComplete}
             setDeletingId={setDeletingId}
           />
         </div>
-        {deletingId && (
-          <DeleteConfirmModal
-            onCancel={() => setDeletingId(null)}
-            onConfirm={() => {
-              handleDelete(deletingId);
-              setDeletingId(null);
-            }}
-            message="Вы уверенны что хотите удалить задачу"
-          />
-        )}
-        {isDeletingCompleted && (
-          <DeleteConfirmModal
-            onCancel={() => setIsDeletingCompleted(false)}
-            onConfirm={confirmDeleteCompleted}
-            message={`Вы уверенны что хотите удалить все выполненые  задачи (${
-              todos.filter((todo) => todo.completed).length
-            })`}
-          />
-        )}
-        {hasCompletedTodos && (
-          <button
-            onClick={handleDeleteCompleted}
-            className="bg-gray-400 text-xl   text-white p-2 rounded xl -mt-6 mb-2"
-          >
-            Удалить выполненые задачи
-          </button>
-        )}
+      
+        <DeleteConfirmModal
+          deletingId={deletingId}
+          onCancel={() => setDeletingId(null)}
+          onConfirm={() => {
+            handleDelete(deletingId);
+            setDeletingId(null);
+          }}
+          message="Вы уверенны что хотите удалить задачу"
+        />
+
+        <DeleteConfirmModal
+          isDeletingCompleted={isDeletingCompleted}
+          onCancel={() => setIsDeletingCompleted(false)}
+          onConfirm={confirmDeleteCompleted}
+          message={`Вы уверенны что хотите удалить все выполненые  задачи (${
+            todos.filter((todo) => todo.completed).length
+          })`}
+        />
+
+        <DeleteCompletedButton
+          onClick={handleDeleteCompleted}
+          hasCompletedTodos={hasCompletedTodos}
+        />
       </div>
     </div>
   );

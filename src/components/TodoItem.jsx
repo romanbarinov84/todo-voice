@@ -1,55 +1,61 @@
 import { useState } from "react";
 
-
 export const TodoItem = ({ todo, onDelete, onToggleComplete, onUpdate }) => {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
   const isCompleted = todo.completed;
-  const [editText, setEditText] = useState(todo.text)
+  const [editText, setEditText] = useState(todo.text);
 
-  
   console.log(isCompleted);
 
   const handleSave = () => {
-    if(editText.trim()){
+    if (editText.trim()) {
       const updatedTodo = { ...todo, text: editText };
-    onUpdate(updatedTodo);
-
+      onUpdate(updatedTodo);
     }
-    setIsEditing(false)
-  }
+    setIsEditing(false);
+  };
 
   return (
     <>
-      <div onDoubleClick={() => setIsEditing(true)} className="flex justify-center text-center -mb-7 bg-white text-lg rounded-t-xl cursor-pointer ">
-      {isEditing ? (<div className="flex flex-col w-full gap-2 items-stretch">
-        <input 
-          type="text"
-           value={editText} 
-           onChange={(e) => setEditText(e.target.value)}
-           onKeyDown={(e) => e.key === "Enter" && handleSave()} 
-           />
-      </div>) : ( <span> Созданно: {" "} 
-          {new Date(todo.createdAt).toDateString("ru-RU",{
-            day: "numeric",
-            month:"long",
-            year:"numeric",
-            hour:"2-digit",
-            minute:"2-digit",
-          })}
-          </span>) }
-       
+      <div
+        onDoubleClick={() => setIsEditing(true)}
+        className="flex justify-center text-center -mb-7 bg-white text-lg rounded-t-xl cursor-pointer "
+      >
+        {isEditing ? (
+          <div className="flex flex-col w-full gap-2 items-stretch">
+            <input
+              type="text"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSave()}
+            />
+          </div>
+        ) : (
+          <span>
+            {" "}
+            Созданно:{" "}
+            {new Date(todo.createdAt).toDateString("ru-RU", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        )}
       </div>
       <div className="flex items-center justify-between shadow-2xl bg-gray-100 dark:bg-white p-2 rounded-xl hover:shadow-lg dark:hover:shadow-amber-50 text-2xl h-22 ">
-       <div className="flex flex-col " >
-       <span className={`text-3xl mr-10 ${isCompleted ? "line-through" : ""}`}>
-          {todo.text}
-        </span>
-       </div>
+        <div className="flex flex-col ">
+          <span
+            className={`text-3xl mr-10 ${isCompleted ? "line-through" : ""}`}
+          >
+            {todo.text}
+          </span>
+        </div>
 
         <div className="flex items-center">
           <button
             onClick={() => onToggleComplete(todo.id)}
-            
             className={`text-3xl cursor-pointer ${
               isCompleted
                 ? "text-green-300 font-bold text-2xl"
@@ -59,7 +65,7 @@ export const TodoItem = ({ todo, onDelete, onToggleComplete, onUpdate }) => {
             Completed!
           </button>
         </div>
-        
+
         <button
           className="text-red-600 border-2 cursor-pointer border-red-800 rounded-lg p-2"
           onClick={() => onDelete(todo.id)}

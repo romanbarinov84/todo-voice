@@ -65,11 +65,11 @@ export const useTodoManagement = () =>{
 
         const hasCompletedTodos = todos.some((todos) => todos.completed);
         console.log(todos.completed);
-
+        
         const handleDeleteCompleted = () => {
-            if (!hasCompletedTodos) return;
-            setIsDeletingCompleted(true);
-          };
+          if (!hasCompletedTodos) return;
+          setIsDeletingCompleted(true); // Это должно быть в хуке, и должно работать
+        };
         
     
     return {

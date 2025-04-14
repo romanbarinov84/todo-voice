@@ -1,4 +1,8 @@
-const DeleteConfirmModal = ({onCancel,onConfirm,message}) => {
+const DeleteConfirmModal = ({onCancel,onConfirm,message ,deletingId ,isDeletingCompleted}) => {
+
+  const showModal  = deletingId || isDeletingCompleted
+
+  if(!showModal) return null
   return (
     <>
      <div className="fixed inset-0">
