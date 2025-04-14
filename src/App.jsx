@@ -7,6 +7,8 @@ import { getInitialTheme } from "./helpers/GetInitialTheme";
 import { toggleTheme } from "./helpers/ToggleTheme";
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./Hooks/useTodoManagement";
+import Header from "./components/Header";
+import TodoList from "./components/TodoList";
 
 function App() {
   const [theme, setTheme] = useState(getInitialTheme());
@@ -33,24 +35,15 @@ function App() {
         <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} theme={theme} />
 
         <div className="mx-auto flex flex-col gap-3  rounded-xl p-10 ">
-          <h1 className="text-6xl font-bold text-center text-gray-10 dark:text-white mb-11">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-              My ToDo-App
-            </span>
-          </h1>
+          <Header />
 
           <AddToDo onAdd={onAdd} />
-          <div className="flex flex-col gap-6 ">
-            {todos.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                onDelete={() => setDeletingId(todo.id)}
-                onToggleComplete={toggleComplete}
-                onUpdate={handleUpdate}
-              />
-            ))}
-          </div>
+          <TodoList
+            todos={todos}
+            handleUpdate={handleUpdate}
+            toggleComplete={toggleComplete}
+            setDeletingId={setDeletingId}
+          />
         </div>
         {deletingId && (
           <DeleteConfirmModal
