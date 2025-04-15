@@ -1,11 +1,11 @@
 import { useState } from "react";
 
+import { FaCheckCircle, FaRegCircle, FaTrashAlt } from "react-icons/fa";
+
 export const TodoItem = ({ todo, onDelete, onToggleComplete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const isCompleted = todo.completed;
   const [editText, setEditText] = useState(todo.text);
-
-  console.log(isCompleted);
 
   const handleSave = () => {
     if (editText.trim()) {
@@ -34,7 +34,7 @@ export const TodoItem = ({ todo, onDelete, onToggleComplete, onUpdate }) => {
           <span>
             {" "}
             Созданно:{" "}
-            {new Date(todo.createdAt).toDateString("ru-RU", {
+            {new Date(todo.createdAt).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -57,21 +57,19 @@ export const TodoItem = ({ todo, onDelete, onToggleComplete, onUpdate }) => {
           <button
             onClick={() => onToggleComplete(todo.id)}
             className={`text-3xl cursor-pointer ${
-              isCompleted
-                ? "text-green-300 font-bold text-2xl"
-                : "text-gray-400"
+              isCompleted ? "text-green-500" : "text-gray-400"
             } mr-10`}
           >
-            Completed!
+            {isCompleted ? <FaCheckCircle /> : <FaRegCircle />}
+          </button>
+
+          <button
+            className="text-red-600 border-2 cursor-pointer border-red-800 rounded-lg p-2"
+            onClick={() => onDelete(todo.id)}
+          >
+            <FaTrashAlt />
           </button>
         </div>
-
-        <button
-          className="text-red-600 border-2 cursor-pointer border-red-800 rounded-lg p-2"
-          onClick={() => onDelete(todo.id)}
-        >
-          Delete
-        </button>
       </div>
       <div
         className={`flex flex-1 border-black bg-amber-300 -mt-7 px-4 py-2 rounded-b-xl ${

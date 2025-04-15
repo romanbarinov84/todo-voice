@@ -1,10 +1,17 @@
-import { TodoItem } from "./TodoItem"
+import { DndContext, closestCenter} from "@dnd-kit/core"
+import { TodoItem} from "./TodoItem"
+
 
 export default function TodoList({todos, handleUpdate, toggleComplete, setDeletingId}) {
 
+ 
+
+
+
+
     return(
-        <>
-          <div className="flex flex-col gap-6 ">
+       
+              <div className="flex flex-col gap-6 ">
             {todos.map((todo) => (
               <TodoItem
                 key={todo.id}
@@ -15,6 +22,6 @@ export default function TodoList({todos, handleUpdate, toggleComplete, setDeleti
               />
             ))}
           </div>
-        </>
+       
     )
 }
